@@ -1,0 +1,182 @@
+[
+    {
+        "repository": "jquery/jquery",
+        "commit": "0293d3e30dd68bfe92be1d6d29f9b9200d1ae917",
+        "should_review": true,
+        "reference": "This PR introduces a new workflow that is making use of environment variables and secrets."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "dc06d68bdc4c2562b5cc530f21e668a17d78ee2d",
+        "should_review": true,
+        "reference": "Although the PR is on a test file it indicates that is an XSS fix therefore it should be tested for manually for additional bypasses"
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "e7b3bc488d01d584262e12a7c5c25f935d0d034b",
+        "should_review": true,
+        "reference": "This PR disables the auto-promoting logic that could potentially introduce security issues."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "de5398a6ad088dc006b46c6a870a2a053f4cd663",
+        "should_review": true,
+        "reference": "This PR changes the way HTML inputs are treated by jQuery."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "50871a5a85cc802421b40cc67e2830601968affe",
+        "should_review": true,
+        "reference": "This PR prevents scripts with an unsuccessful HTTP response from being executed."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "c7c2855ed13f23322c4064407c1ed84561b95738",
+        "should_review": true,
+        "reference": "It involves preserving CSP properties on script tags."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "753d591aea698e57d6db58c9f722cd0808619b1b",
+        "should_review": true,
+        "reference": "It prevents prototype pollution."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "1f4375a34227f42570d2b72e190e51bcfb1e8597",
+        "should_review": true,
+        "reference": "It enables the functionality to add custom attributes during script transport."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "9c98e4e86eda857ee063bc48adbc1a11bb5506ee",
+        "should_review": true,
+        "reference": "This PR implements protection against code injection."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "8969732518470a7f8e654d5bc5be0b0076cb0b87",
+        "should_review": true,
+        "reference": "This PR processes XML responses, which could be prone to injection attacks."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "bde53edcf4bd6c975d068eed4eb16c5ba09c1cff",
+        "should_review": false,
+        "reference": "It updates only a single test, no functional code."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "967af73203378db0cc3637adee85c442e246e05a",
+        "should_review": false,
+        "reference": "It updates dependencies and removes one that is unused."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "620870a1af5287d29c77ec6d5f973116b23793a7",
+        "should_review": false,
+        "reference": "It fixes typos across the codebase."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "26415e081b318dbe1d46d2b7c30e05f14c339b75",
+        "should_review": false,
+        "reference": "This is a CSS change that applies to Edge and IE."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "65b85031fb5688361c077bc04e641e4b502671e1",
+        "should_review": false,
+        "reference": "This is a CSS change that applies to Bootstrap."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "8c7da22caeae8c2c3f7e9869d5f47414669f106c",
+        "should_review": false,
+        "reference": "This PR removes legacy pseudo selectors."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "012bda75f1941eb60869be1e4b6606aa40b17024",
+        "should_review": false,
+        "reference": "It only changes assertions in tests."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "32e803c5bc821a34d6d225659f7a4b4a24053e07",
+        "should_review": false,
+        "reference": "It doesn't change any code, just the build script."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "6fd5e480c1cd3e481e7097763ee281b65bc74306",
+        "should_review": false,
+        "reference": "It only updates animations for jQuery."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "b21c88ff0c293db0711d378411901259052ca2b4",
+        "should_review": false,
+        "reference": "It's a version tag."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "4fd6e8e7605561facc1ed05ddcfee2f7c78ce3ec",
+        "should_review": false,
+        "reference": "This PR is moving the same functions within the file."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "b561f5ab0a5e13f8203307016a02ee965a8be7d3",
+        "should_review": false,
+        "reference": "This PR is simply about code formatting."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "740e190223d19a114d5373758127285d14d6b71e",
+        "should_review": false,
+        "reference": "This PR is removing old browsers from support."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "147726af127bce98b4e9dfe517d68f4a1ea0c1fc",
+        "should_review": false,
+        "reference": "It improves the way data attributes are fetched."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "5d20a3c3f10bda935c8370392a25e45719afa6b9",
+        "should_review": false,
+        "reference": "It changes the context in ajax execution."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "5cbb234dd3273d8e0bbd454fb431ad639c7242c1",
+        "should_review": false,
+        "reference": "Although it's changing the code, it's enriching the ready functionality."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "93a8fa6bfc1c8a469e188630b61e736dfb69e128",
+        "should_review": false,
+        "reference": "It's replacing the jQuery json parse function with the native one."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "b60b26e18477d21fa5ec9c6572e114fc5d441730",
+        "should_review": false,
+        "reference": "This is changing the precision of CSS width/height values."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "5a8f76933288396b915800a18240aa17d3414201",
+        "should_review": false,
+        "reference": "This PR is implementing functionality to save an item's visibility state."
+    },
+    {
+        "repository": "jquery/jquery",
+        "commit": "df67c1ab0963c6a05735e84f4088a0f6b7484b3d",
+        "should_review": false,
+        "reference": "It splits existing functionality into multiple files."
+    }
+]
