@@ -1,0 +1,107 @@
+#  ____          _ _____ _               ___________
+# |  _ \ ___  __| |  ___| | __ _  __ _   ||########|
+# | |_) / _ \/ _` | |_  | |/ _` |/ _` |  ||########|
+# |  _ <  __/ (_| |  _| | | (_| | (_| |  ||~~~~~~~~~
+# |_| \_\___|\__,_|_|   |_|\__,_|\__, |  ||
+#                                |___/   ||
+#
+# For more information, please see the README at https://github.com/Addepar/RedFlag
+#
+####################
+# General Settings #
+####################
+# --------------------------------------------------------------------------------------------
+repo: zed-industries/zed
+
+# From and To can be branches, tags, or commit SHAs
+from: v0.138.6
+to: v0.139.3
+
+########################
+# Integration Settings #
+########################
+# --------------------------------------------------------------------------------------------
+# GitHub PAT for GitHub authentication. It is NOT RECOMMENDED to hardcode these values in 
+# the configuration file due to the risk that the file may unintentionally disclosed and the 
+# values leaked. It is expected to be set through the RF_GITHUB_TOKEN environment variable.
+# However, if needed, it can be set here.
+github_token: token
+
+jira:
+  # Omit jira_url to skip using Jira.
+  url:
+  # Jira credentials. It is NOT RECOMMENDED to hardcode these values in the configuration file
+  # due to the risk that the file may unintentionally disclosed and the values leaked.
+  # These are expected to be set through the RF_JIRA_USER and RF_JIRA_TOKEN environment
+  # variables. However, if needed, they can be set here.
+  user: username
+  token: token
+
+################
+# LLM Settings #
+################
+# --------------------------------------------------------------------------------------------
+bedrock:
+  model_id: anthropic.claude-3-sonnet-20240229-v1:0
+  profile: default
+  region: us-east-1
+  
+prompts:
+  # This is the decision making prompt. If the change should be reviewed, it proceeds to the test_plan prompt.
+  review: 
+    role: |
+      You are an application security engineer subject matter expert.
+      You are tasked with determining what functionality should be penetration tested by our offensive security team for the next application version.
+      Read the following information carefully, because you will be asked questions about it.
+    question: |
+      Tell me if this pull request should be included in an offensive security penetration test, or if it can be ignored.
+      If the pull request should be included in the penetration test, include a list of files chosen from the ones in the pull request, that should be included in the penetration test.
+      Use the information provided when making your decisions, do not make assumptions.
+      Pull requests that only have minor changes to database schema, infrastructure, build processes, or code/unit testing can be ignored.
+      Pull requests that add new API routes should always be reviewed to ensure that they have proper controls.
+      The offensive security team has limited resources, so make your recommendation carefully.
+
+  # This prompt directs the model to do an action.
+  test_plan:
+    role: |
+      You are an application security engineer subject matter expert.
+      You are tasked with determining what functionality should be penetration tested by our offensive security team for the next application version.
+      Read the following information carefully, because you will be asked questions about it.
+    question: |
+      Create a penetration testing plan for the offensive security team.
+      The plan should consist of step-by-step instructions based on the information provided that the offensive security team can use to identify vulnerabilities.
+      Include specific details about what to test, such as HTTP methods, API routes, function/class names, and areas of interest.
+      Do not include instructions that would be handled by the developers or quality assurance team, such as verifying that a feature works as expected or validating unit tests.
+
+#########################
+# Input/Output Settings #
+#########################
+# --------------------------------------------------------------------------------------------
+# Output directory for reports.
+output_dir: results
+
+# The maximum number of results to feed to the LLM.  0 means no limit.
+max_results: 0
+
+# Filter out commits based on title or user
+filter_commits:
+  title:
+    # Irrelevant
+    - '.*DISCARD-\d+'
+    # Generic merge
+    - "^Merge (remote-tracking )?branch '.*'( into .*)?$"
+  user:
+    # Automated changes
+    - 'github-actions@github.com'
+    - 'jenkinsuser@jenkins.example.com'
+
+# Strip unwanted lines from the commit descriptions before sending to the model.
+strip_description_lines:
+  - '<!--\nInstructions: Fill in the content below.\nAdd your Release Notes at the bottom.\n-->\n'
+  - '<!-- Add description here. -->\n'
+  - '<!-- Optional: Uncomment following section to add reviewer notes -->\n'
+  - '<!--\n## Reviewer Notes\n\nAdd notes here to describe what reviewers should look out for when\nreviewing this PR.\n-->\n'
+  - '<!--\n## Testing Instructions\n\nAdd instructions here if testing the changes needs any special setup\n-->\n'
+  - "<!-- Optional: Uncomment following section if there's an accompanying\nclient side PR that this depends on\nIverson PR:\n-->\n"
+  - '<!--\nEnter brief release notes (1-2 sentences). These are used by our tool\ncalled Ticketbot\nto pre-populate the "Dev Release Notes" section of auto-created RELEASE\ntickets\nFor trivial changes, enter "None".\n-->\n'
+  - '<!--\nInstructions: Fill in the content below.\nAdd your Release Notes at the bottom.\n-->\n'

@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "addepar-redflag"
+version = "0.1.0"
+description = "RedFlag uses AI to identify high-risk code changes. Run it in batch mode for release candidate testing or in CI pipelines to flag PRs and add reviewers. RedFlag's flexible configuration makes it valuable for any team."
+authors = ["Addepar Security Engineering <security-engineering@addepar.com>"]
+repository = "https://github.com/Addepar/RedFlag"
+license = "MIT"
+keywords = ["security", "code review", "static analysis", "AI"]
+readme = "README.md"
+classifiers = [
+    "Environment :: CI/CD",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Security",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing"
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+click = "^8.1.7"
+pygithub = "^2.1.1"
+gitpython = "^3.1.40"
+atlassian-python-api = "^3.41.3"
+jinja2 = "^3.1.2"
+boto3 = "^1.28.79"
+anthropic = "^0.7.5"
+colorama = "^0.4.6"
+tiktoken = "^0.5.2"
+langchain = "^0.1.13"
+langchain-core = "^0.1.34"
+langchain-community = "^0.0.29"
+pathlib = "^1.0.1"
+rich = "^13.7.1"
+urllib3 = "^2.2.1"
+python-dotenv = "^1.0.1"
+
+# pinned due to https://github.com/langchain-ai/langchain/issues/22972
+tenacity = "8.3.0"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.26.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+redflag = "addepar_redflag.util.cli:cli"

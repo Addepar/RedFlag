@@ -1,0 +1,255 @@
+name: 'Addepar RedFlag'
+
+inputs:
+  github_token:
+    type: string
+    required: true
+    description: 'GitHub token for API access.'
+  bedrock_model_id:
+    type: string
+    required: false
+    description: 'The Bedrock model to use.'
+  bedrock_profile:
+    type: string
+    required: false
+    description: 'The AWS Profile to use for Bedrock.'
+  bedrock_region:
+    type: string
+    required: false
+    description: 'The AWS Region to use for Bedrock.'
+  comment_message:
+    type: string
+    required: false
+    description: 'Message to add to the PR when flagged.'
+    default: '**This PR has been flagged for review and appropriate approvers have been added.**\nPlease reach out if you have any questions.'
+  config_file:
+    type: string
+    required: false
+    description: 'RedFlag config.yaml file.'
+  debug_llm:
+    type: bool
+    required: false
+    description: 'Flag to enable debug LLM output.'
+  jira_token:
+    type: string
+    required: false
+    description: 'Token to use for the Jira integration.'
+  jira_url:
+    type: string
+    required: false
+    description: 'API endpoint to use for the Jira integration.'
+  jira_user:
+    type: string
+    required: false
+    description: 'Username to use for the Jira integration.'
+  reviewer_teams:
+    type: string
+    required: false
+    description: 'Comma-separated string of teams to request to review the PR.'
+  reviewer_users:
+    type: string
+    required: false
+    description: 'Comma-separated string of users to request to review the PR.'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Install Python'
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: 'Install RedFlag'
+      working-directory: ${{ github.action_path }}
+      shell: bash
+      run: |
+        pip install .
+
+    - name: 'Get Configuration'
+      if: ${{ inputs.config_file != '' }}
+      shell: bash
+      run: |
+        echo "Custom config specified: ${{ inputs.config_file }}"
+        if [[ -f "${{ inputs.config_file }}" ]]; then
+          echo "Config file exists"
+          cp "${{ inputs.config_file }}" "${{ github.action_path }}/config-active.yaml"
+        else
+          echo "::warning:: RedFlag: Config file ${{ inputs.config_file }} does not exist!"
+        fi
+
+    - name: 'Run RedFlag'
+      env:
+        RF_GITHUB_TOKEN: ${{ inputs.github_token }}
+        RF_JIRA_TOKEN: ${{ inputs.jira_token }}
+        RF_FROM: ""
+      working-directory: ${{ github.action_path }}
+      shell: bash
+      run: |
+        cli_opts=" --output-dir results"
+        cli_opts+=" --repo ${GITHUB_REPOSITORY}"
+        cli_opts+=" --to ${{ github.event.number }}"
+        cli_opts+=" --no-progress-bar"
+
+        if [ -n "${{ inputs.debug_llm }}" ]; then
+          cli_opts+=" --debug-llm"
+        fi
+        if [ -n "${{ inputs.bedrock_model_id }}" ]; then
+          cli_opts+=" --bedrock.model-id ${{ inputs.bedrock_model_id }}"
+        fi
+        if [ -n "${{ inputs.bedrock_profile }}" ]; then
+          cli_opts+=" --bedrock.profile ${{ inputs.bedrock_profile }}"
+        fi
+        if [ -n "${{ inputs.bedrock_region }}" ]; then
+          cli_opts+=" --bedrock.region ${{ inputs.bedrock_region }}"
+        fi
+        if [ -n "${{ inputs.jira_url }}" ]; then
+          cli_opts+=" --jira-url ${{ inputs.jira_url }}"
+        fi
+        if [ -n "${{ inputs.jira_user }}" ]; then
+          cli_opts+=" --jira-user ${{ inputs.jira_user }}"
+        fi
+        if [ -n "${{ inputs.config_file }}" ]; then
+          cli_opts+=" --config config-active.yaml"
+        fi
+
+        python -m addepar_redflag $cli_opts
+
+    - name: 'Delete Previous Comments'
+      shell: bash
+      run: |
+        # Fetch all comments on the pull request
+        comments=$(curl -s -H "Authorization: token ${{ inputs.github_token }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments")
+
+        # Identify and delete previous comments made by this action
+        comment_ids=$(echo "$comments" | jq -r '.[] | select(.body | contains("<!-- RedFlag-Comment -->")) | .id')
+
+        for comment_id in $comment_ids; do
+          curl -s -X DELETE -H "Authorization: token ${{ inputs.github_token }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/comments/$comment_id"
+        done
+
+    - name: 'Check Results'
+      id: check-results
+      working-directory: ${{ github.action_path }}
+      shell: bash
+      run: |
+        # Step output value defaults to false
+        in_scope_results="false"
+
+        # Define the results folder and the file pattern
+        results_folder="results"
+        file_pattern="*.json"
+
+        # Define the column width
+        column_width=40
+
+        # Function to wrap text
+        wrap_text() {
+            echo "$1" | fold -sw $column_width
+        }
+
+        # Print the table header
+        printf "%-40s | %-40s\n" "Reasoning" "Test Plan"
+        printf "%-40s-+-%-40s\n" "----------------------------------------" "----------------------------------------"
+
+        # Iterate over each matching file
+        for file in $(find "$results_folder" -type f -iname "$file_pattern"); do
+          # Set return value to true
+          in_scope_results="true"
+
+          # Use jq to extract and print the desired fields
+          jq -r '.in_scope[] | [.review.reasoning, .test_plan.test_plan] | @tsv' "$file" | while IFS=$'\t' read -r reasoning test_plan; do
+            # Handle newline characters in the reasoning and test plan fields
+            reasoning=$(printf "%s" "$reasoning")
+            test_plan=$(printf "%s" "$test_plan")
+
+            # Wrap the reasoning and test plan text using fold
+            wrapped_reasoning=$(printf "%s" "$reasoning" | fold -sw $column_width)
+            wrapped_test_plan=$(printf "%s" "$test_plan" | fold -sw $column_width)
+
+            # Combine the wrapped texts line by line
+            paste <(printf "%s\n" "$wrapped_reasoning") <(printf "%s\n" "$wrapped_test_plan") | while IFS=$'\t' read -r line1 line2; do
+                printf "%-40s | %-40s\n" "$line1" "$line2"
+            done
+
+            # Print a row separator
+            printf "%-40s-+-%-40s\n" "----------------------------------------" "----------------------------------------"
+          done
+        done
+
+        # Echo step output
+        echo "in_scope_results=$in_scope_results">>$GITHUB_OUTPUT
+
+    - name: 'Comment on PR'
+      if: ${{ steps.check-results.outputs.in_scope_results == 'true' }}
+      shell: bash
+      run: |
+        redflag_header='${{ '\${{\\textbf{\\color{red}\\Large{\\textsf{RedFlag :triangular_flag_on_post:}}}}}\$' }}'
+        comment_body='<!-- RedFlag-Comment -->'
+        comment_body+="\n$redflag_header\n\n"
+        comment_body+="${{ inputs.comment_message }}"
+          
+        # Escape the JSON string properly
+        escaped_comment_body=$(echo -e "$comment_body" | jq -sR .)
+
+        curl -s -H "Authorization: token ${{ inputs.github_token }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Content-Type: application/json" \
+          --data "{\"body\":$escaped_comment_body}" \
+          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+
+    - name: 'Add Reviewers'
+      if: ${{ steps.check-results.outputs.in_scope_results == 'true' && (inputs.reviewer_users  != '' || inputs.reviewer_teams  != '') }}
+      shell: bash
+      run: |
+        # Split the user reviewers input into an array
+        IFS=',' read -r -a users_array <<< "${{ inputs.reviewer_users }}"
+        IFS=',' read -r -a teams_array <<< "${{ inputs.reviewer_teams }}"
+        
+        # Convert arrays to JSON arrays
+        users_json=$(printf '%s\n' "${users_array[@]}" | jq -R . | jq -s .)
+        users_json=$(echo $users_json | tr -d " ")
+        teams_json=$(printf '%s\n' "${teams_array[@]}" | jq -R . | jq -s .)
+        teams_json=$(echo $teams_json | tr -d " ")
+        
+        # Add user reviewers
+        if [[ -n "${{ inputs.reviewer_users }}" ]]; then
+          echo "Adding user reviewers: ${{ inputs.reviewer_users }}"
+          curl_result=$(curl -s -X POST \
+            -H "Authorization: token ${{ inputs.github_token }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Content-Type: application/json" \
+            --data "{\"reviewers\":$users_json}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers")
+
+          # Print warning if error is received adding user reviewers
+          has_errors=$(echo "$curl_result" | jq -r '.errors | if type=="array" then "true" else "false" end')
+          if [ "$has_errors" == "true" ]; then
+            echo "::warning:: RedFlag: Error adding user reviewers \"${{ inputs.reviewer_users }}\".  Check the users exist and have access to the repository."
+          fi
+        fi
+        
+        # Add team reviewers
+        if [[ -n "${{ inputs.reviewer_teams }}" ]]; then
+          echo "Adding team reviewers: ${{ inputs.reviewer_teams }}"
+          curl_result=$(curl -s -X POST \
+            -H "Authorization: token ${{ inputs.github_token }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Content-Type: application/json" \
+            --data "{\"team_reviewers\":$teams_json}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers")
+
+          # Print warning if error is received adding team reviewers
+          has_errors=$(echo "$curl_result" | jq -r '.errors | if type=="array" then "true" else "false" end')
+          if [ "$has_errors" == "true" ]; then
+            echo "::warning:: RedFlag: Error adding team reviewers \"${{ inputs.reviewer_teams }}\".  Check the teams exist, have access to the repository, and that you are using a PAT for authentication, not a workflow provided GITHUB_TOKEN."
+          fi
+        fi
+
+    - name: 'Upload Data'
+      uses: actions/upload-artifact@v4
+      with:
+        name: RedFlag-Results
+        path: ${{ github.action_path }}/results
