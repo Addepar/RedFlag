@@ -177,7 +177,7 @@ The following table shows configuration options for each parameter:
 
 | Parameter                                                                             | CLI Param | Env Var | Config File | Default |
 |---------------------------------------------------------------------------------------|-----------|---------|-------------|---------|
-| [Configuration File](https://github.com/Addepar/RedFlag/blob/main/sample.config.yaml) | --config  | -       | -           | -       |
+| [Configuration File](https://github.com/Addepar/RedFlag/blob/main/config.sample.yaml) | --config  | -       | -           | -       |
 | Repository                                                                            | --repo    | RF_REPO | repo        | -       |
 | Branch/Commit From                                                                    | --from    | RF_FROM | from        | -       |
 | Branch/Commit To                                                                      | --to      | RF_TO   | to          | -       |
