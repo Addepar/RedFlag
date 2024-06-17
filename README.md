@@ -23,7 +23,7 @@ as it's configuration makes it infinitely flexible.
 <a href="https://addepar.com/blog/introducing-redflag-using-ai-to-scale-addepar-s-offensive-security-team"><strong>Read the blog post »</strong></a>
 <br />
 <br />
-<a href="https://github.com/Addepar/RedFlag">View Sample Report</a>
+<a href="https://opensource.addepar.com/RedFlag/">View Sample Report</a>
 ·
 <a href="https://github.com/Addepar/RedFlag/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
 ·
