@@ -8,7 +8,6 @@ license = "MIT"
 keywords = ["security", "code review", "static analysis", "AI"]
 readme = "README.md"
 classifiers = [
-    "Environment :: CI/CD",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
