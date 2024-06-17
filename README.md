@@ -266,7 +266,7 @@ Say hi to Addepar Security Engineering at [security-engineering@addepar.com](mai
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[python-shield]: https://img.shields.io/badge/Python-3.6+-blue?style=for-the-badge&logo=python&logoColor=white
+[python-shield]: https://img.shields.io/badge/Python-3.11+-blue?style=for-the-badge&logo=python&logoColor=white
 [python-url]: https://www.python.org/
 [contributors-shield]: https://img.shields.io/github/contributors/Addepar/RedFlag.svg?style=for-the-badge
 [contributors-url]: https://github.com/Addepar/RedFlag/graphs/contributors
