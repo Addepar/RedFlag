@@ -126,8 +126,9 @@ redflag --config custom-config.yml
 ## Report Output
 
 By default, RedFlag produces an HTML report that can be opened in a browser.
-
-[![Report][animated-report]][animated-report-url]
+<a href="https://opensource.addepar.com/RedFlag/">
+   <img src="https://raw.githubusercontent.com/Addepar/RedFlag/main/docs/images/Report-Animated.gif">
+</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -281,8 +282,6 @@ Say hi to Addepar Security Engineering at [security-engineering@addepar.com](mai
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/company/addepar
 
-[animated-report]: https://raw.githubusercontent.com/Addepar/RedFlag/main/docs/images/Report-Animated.gif
-[animated-report-url]: TBD
 [batch-workflow]: https://raw.githubusercontent.com/Addepar/RedFlag/main/docs/images/Batch-Workflow.png
 [docs-ci-mode]: https://img.shields.io/badge/Read%20More-How%20To%20Use%20RedFlag%20In%20CI%20Mode-blue?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAMKADAAQAAAABAAAAMAAAAADbN2wMAAABcUlEQVRoBe1ZQU7DMBBsOPMC3gISDwDxAr5BJe5I/Ki3gkS58ROO9MKFdJZmLyOysWIzUNiVVs527Rl7JrnUi8V/iL7vr5CPyC1SFQ9NtMVu71U7Zp7qAwDQlLd4R94gT6pBCwCM0KJgajwFGPbaWCzjmW27e8o2B3gbwD6Vx/Ozg3/DuHEZHNvraDyKmugdU/+D6pZle2xXAuPBvkJ+BvuIl8hf9xF30Ttgu4/6ot6m67qzMa6pb8DXneNhhXz1H4Tj6Wwuc8BiDGDfHe+PrSv9vQS/1IFSTvm8PIBcciJMB0gQeZkOyCUnwnSABJGX6YBcciJMB0gQeZkOyCUnwnSABJGX6YBcciJMB0gQeZkOyCUnwnSABJGX6YBcciJMB0gQefnnHdiapPibW3IzM8e+KQdeBtDrOeA/vgbKXw6XDF/ekZVcQNQcogQ/vCMzcoDcYbit2UjtWtyRTe4z5MAhLpBrpF9841EWT+HmDr25A8AdiN2uwvv8AAAAAElFTkSuQmCC
 [docs-ci-mode-url]: https://github.com/Addepar/RedFlag/wiki/CI-Mode
