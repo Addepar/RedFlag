@@ -216,25 +216,28 @@ async def redflag(
             'Retrieved PRs',
             MessageType.SUCCESS
         )
-
-    # Get all commits between from and to
     else:
-        count = 0
         try:
-            compare = repository.compare(to_commit, from_commit)
+            # Get all commits between from and to
+            compare = repository.compare(from_commit, to_commit)
+
+            # If there are no commits, try the other way around
+            if not compare.ahead_by:
+                compare = repository.compare(to_commit, from_commit)
+                
+                # If we can't find anything, exit
+                if not compare.ahead_by:
+                    pretty_print(
+                        'No PRs to evaluate, exiting.',
+                        MessageType.FATAL
+                    )
+                    exit(0)
         except UnknownObjectException as e:
             pretty_print(
                 f'Failed to find the to and from refs: {e}',
                 MessageType.FATAL
             )
             exit(1)
-
-        if not compare.ahead_by:
-            pretty_print(
-                'No PRs to evaluate, exiting.',
-                MessageType.FATAL
-            )
-            exit(0)
 
         # Flag for truncating SHA hashes in link text
         to_hash = match('^[a-f0-9]{40}$', to_commit)
@@ -277,6 +280,7 @@ async def redflag(
             )
 
         # Iterate over commits and create PR objects
+        count = 0
         with progress:
             for commit in commits:
                 lines = commit \
@@ -444,7 +448,7 @@ async def redflag(
     filename = f'{repository.full_name.replace("/", "_")}-{base_filename.replace("/", "-")}-{datetime.now().strftime("%Y-%m-%d-%H-%M-%S")}'
 
     jinja = Environment(
-        loader=PackageLoader("redflag"),
+        loader=PackageLoader("addepar_redflag"),
         autoescape=select_autoescape()
     )
 

@@ -2,15 +2,15 @@ import yaml
 from os import getenv
 from pathlib import Path
 
-from .llm import (
-    DEFAULT_ROLE,
-    DEFAULT_REVIEW_QUESTION,
-    DEFAULT_TEST_PLAN_QUESTION
-)
 from .console import (
     pretty_print,
     pretty_print_config_table,
     MessageType
+)
+from .llm import (
+    DEFAULT_ROLE,
+    DEFAULT_REVIEW_QUESTION,
+    DEFAULT_TEST_PLAN_QUESTION
 )
 
 def _update_nested_dict(
