@@ -277,7 +277,7 @@ Say hi to Addepar Security Engineering at [security-engineering@addepar.com](mai
 [issues-shield]: https://img.shields.io/github/issues/Addepar/RedFlag.svg?style=for-the-badge
 [issues-url]: https://github.com/Addepar/RedFlag/issues
 [license-shield]: https://img.shields.io/github/license/Addepar/RedFlag.svg?style=for-the-badge
-[license-url]: https://github.com/Addepar/RedFlag/blob/main/LICENSE.txt
+[license-url]: https://github.com/Addepar/RedFlag/blob/main/LICENSE.md
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/company/addepar
 
