@@ -16,6 +16,7 @@ from .config import (
 )
 from .console import (
     pretty_print,
+    pretty_print_header,
     pretty_print_traceback,
     MessageType
 )
@@ -36,10 +37,7 @@ def common_arguments(parser, default_config):
 
 
 def cli():
-    pretty_print(
-        'Starting RedFlag 🚩',
-        MessageType.INFO
-    )
+    pretty_print_header()
 
     # Load env var file, if present
     load_dotenv()
