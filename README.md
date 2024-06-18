@@ -127,9 +127,7 @@ redflag --config custom-config.yml
 
 By default, RedFlag produces an HTML report that can be opened in a browser.
 
-<a href="https://opensource.addepar.com/RedFlag/">
-   <img src="https://opensource.addepar.com/RedFlag/images/Report-Animated.gif">
-</a>
+<img src="https://opensource.addepar.com/RedFlag/images/Report-Animated.gif">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
