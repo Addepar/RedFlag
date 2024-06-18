@@ -20,10 +20,10 @@ class MessageType(Enum):
 
 # Define the styles with emojis
 styles = {
-    MessageType.SUCCESS: Style(color="green", bold=True),
-    MessageType.WARN: Style(color="yellow", bold=True),
-    MessageType.FATAL: Style(color="red", bold=True, underline=True),
-    MessageType.INFO: Style(color="blue", bold=True)
+    MessageType.SUCCESS: Style(color="green", bold=False),
+    MessageType.WARN: Style(color="yellow", bold=False),
+    MessageType.FATAL: Style(color="red", bold=False, underline=True),
+    MessageType.INFO: Style(color="blue", bold=False)
 }
 
 # Define the emojis
@@ -40,6 +40,14 @@ def str2bool(string: str) -> bool:
         return False
 
     return string.lower() in ('yes', 'true', 't', 'y', '1')
+
+
+# Helper function for standard formatting
+def pretty_print_header():
+    CONSOLE.print(
+        "Starting [bold]RedFlag 🚩[/bold]",
+        style=Style()
+    )
 
 
 # Helper function for standard formatting
