@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "addepar-redflag"
-version = "0.2.2"
+version = "1.0.0"
 description = "RedFlag uses AI to identify high-risk code changes. Run it in batch mode for release candidate testing or in CI pipelines to flag PRs and add reviewers. RedFlag's flexible configuration makes it valuable for any team."
 authors = ["Addepar Security Engineering <security-engineering@addepar.com>"]
 repository = "https://github.com/Addepar/RedFlag"
