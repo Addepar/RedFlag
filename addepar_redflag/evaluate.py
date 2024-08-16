@@ -64,7 +64,7 @@ async def review_evaluation(
         'format_instructions': review_parser.get_format_instructions()
     }
 
-    # Check the token count if we pass all files in the PR.
+    # Check the token count if we pass all files in the commit range.
     result.token_count = llm.get_num_tokens(review_prompt.format(**prompt_input))
 
     llm_response = await review_chain \
@@ -75,7 +75,7 @@ async def review_evaluation(
     setattr(result, 'review', llm_response)
 
     prediction = (
-        f'{"Yes, this PR should be tested." if llm_response.result else "No, this PR should not be tested."}\n'
+        f'{"Yes, this should be tested." if llm_response.result else "No, this should not be tested."}\n'
         f'Student Logic: {llm_response.reasoning}'
         f'Relevant Files: {llm_response.files}'
     )
@@ -87,7 +87,7 @@ async def review_evaluation(
         {'additional_information': jira_information, 'format_instructions': ''}
     )
         
-    reference = f'Yes, this PR should be tested. {reference}' if should_review else f'No, this PR should not be tested. {reference}'
+    reference = f'Yes, this should be tested. {reference}' if should_review else f'No, this should not be tested. {reference}'
 
     eval_response = await evaluator.aevaluate_strings(
         input=review_prompt.format(**prompt_input),
@@ -199,7 +199,7 @@ async def do_evaluations(
             total=len(dataset)
         )
         
-    # Retrieve all PRs and corresponding Jira tickets and create tasks
+    # Retrieve all commits and corresponding Jira tickets and create tasks
     task_exception = None
     with progress:
         try:
@@ -245,7 +245,7 @@ async def do_evaluations(
                     )
                 )
 
-                # Store PR and Jira information in results list
+                # Store commits and Jira information in results list
                 results.append(result)
 
                 # Update progress bar
