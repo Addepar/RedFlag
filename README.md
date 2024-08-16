@@ -16,7 +16,7 @@
 
 RedFlag leverages AI to determine high-risk code changes. 
 Run it in batch mode to scope manual security testing of release candidates, 
-or run it in your CI pipelines to flag PRs and add the appropriate reviewers. 
+or run it in your CI pipelines to flag commits, either spanning a single or multiple PRs and add the appropriate reviewers. 
 Despite being a security tool, RedFlag can be leveraged for almost any team 
 as it's configuration makes it infinitely flexible.
 <br />
@@ -58,6 +58,14 @@ such as release candidates.
 ![Batch Workflow][batch-workflow]
 
 ## Getting Started
+
+### Ambiguity
+
+When running the code in either Batch or CI mode, messages to workflows or the console will omit terminology indicating that it is "retrieving" and "evaluating" a certain number of "commits from PR(s)".
+
+Typically, commits can only be made via pull requests (PRs) if you have [branch protection or repository rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/defining-the-mergeability-of-pull-requests/managing-a-branch-protection-rule) in place, which is a commonly adopted approach. Consequently, once a PR is squashed and merged, it appears as a single commit in the default branch.
+
+The terminology used may vary depending on how you choose to run RedFlag, as you can specify `--from` and `--to` commit SHAs or branches.
 
 ### Installation
 
@@ -137,8 +145,8 @@ By default, RedFlag produces an HTML report that can be opened in a browser.
 
 # CI Mode
 
-RedFlag can be run in CI pipelines to flag PRs and add the appropriate reviewers.
-This mode uses GitHub Actions to run RedFlag on every PR and post a comment if
+RedFlag can be run in CI pipelines to flag commits (sometimes which span multiple PRs) and add the appropriate reviewers.
+This mode uses GitHub Actions to run RedFlag on every commit and post a comment if
 the PR requires a review.
 
 [![CI Mode][docs-ci-mode]][docs-ci-mode-url]
