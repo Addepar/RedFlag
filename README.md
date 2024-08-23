@@ -99,6 +99,21 @@ Use a [Personal Access Token](https://docs.github.com/en/github/authenticating-t
 export RF_GITHUB_TOKEN=your-token-here
 ```
 
+##### [Slack](https://slack.com/) Integration *(Optional)*
+
+1. [Create a Slack app](https://api.slack.com/quickstart)
+2. [Requesting Scopes](https://api.slack.com/quickstart#scopes)
+3. [Installing and authorizing the app](https://api.slack.com/quickstart#installing)
+4. Add your environment variables to get up and running
+5. Verify everything works with the [util script tests](util-scripts/slack/post-message.py)
+
+```shell
+export RF_SLACK_TOKEN="xoxb-X-Y-Z"
+export RF_SLACK_CHANNEL="C00********"
+```
+
+**Don't forget to invite the bot to the channel to avoid the error `{'ok': False, 'error': 'channel_not_found'}`**
+
 ##### Jira API Token *(Optional)*
 First, set a Jira URL (`https://your-org.atlassian.net`) in the configuration file (`jira_url`), as a CLI parameter (`--jira-url`), or as an environment variable (`RF_JIRA_URL`).
 
@@ -192,6 +207,8 @@ The following table shows configuration options for each parameter:
 | Jira URL                                                                                                                            | --jira-url     | RF_JIRA_URL      | jira.url      | -       |
 | Jira Username                                                                                                                       | --jira-user    | RF_JIRA_USER     | jira.user     | -       |
 | [Jira Token](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/)                    | --jira-token   | RF_JIRA_TOKEN    | jira.token    | -       |
+| [Slack Token](https://api.slack.com/concepts/token-types)                    | --slack-token   | `RF_SLACK_TOKEN`    | slack.token    | None |
+| [Slack Channel (ID)](https://slack.com/help/articles/221769328-Locate-your-Slack-URL-or-ID)                   | --slack-channel   | `RF_SLACK_CHANNEL`    | slack.channel    | None |
 
 #### LLM Settings
 

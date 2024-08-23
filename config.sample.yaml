@@ -27,6 +27,10 @@ to: v0.139.3
 # However, if needed, it can be set here.
 github_token: token
 
+# Slack token and Channel to post to Slack API and send messages to a channel
+slack_token: token
+slack_channel: channel-id
+
 jira:
   # Omit jira_url to skip using Jira.
   url:

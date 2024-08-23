@@ -5,6 +5,7 @@ from sys import exit
 from atlassian import Jira
 from dotenv import load_dotenv
 from github import Auth, Github
+from .slack import Slack
 from langchain.globals import set_debug
 
 from ..evaluate import do_evaluations
@@ -32,6 +33,8 @@ def common_arguments(parser, default_config):
     parser.add_argument('--bedrock-region', help='The AWS Region to use for Bedrock. If not set, will fall back to AWS defaults.')
     parser.add_argument('--bedrock-profile', help='The AWS Profile to use for Bedrock. If not set, will fall back to AWS defaults.')
     parser.add_argument('--bedrock-model-id', help=f'The Bedrock model to use. (default: {default_config["bedrock"]["model_id"]})')
+    parser.add_argument('--slack-token', help='Slack OAUTH token to authenticate to the Slack API.')
+    parser.add_argument('--slack-channel', help='Slack channel ID to post results to, ie "C12345"')
     parser.add_argument('--no-progress-bar', action='store_false', dest='progress_bar', help='Flag to not display a progress bar.')
     parser.add_argument('--no-strip-html-comments', action='store_false', dest='strip_html_comments', help='Flag to not strip HTML comments from PR descriptions.')
 
@@ -96,6 +99,23 @@ def cli():
             password=jira_token
         )
 
+    # instantiate Slack object
+    slack = None
+    if final_config['slack']['channel']:
+        slack_channel = final_config['slack']['channel']
+        slack_token = final_config['slack']['token']
+
+        if not (slack_token and slack_channel):
+            pretty_print(
+                'Slack auth tokens and a channel ID are required for this operation. To skip the Linear integration, leave --slack-token and --slack-channel blank.',
+                MessageType.FATAL
+            )
+            exit(1)
+        slack = Slack(
+            token=slack_token,
+            channel=slack_channel
+        )
+
     # Debug LLM output
     if final_config['debug_llm']:
         set_debug(True)
@@ -114,6 +134,7 @@ def cli():
             asyncio.run(redflag(
                 github=github,
                 jira=jira,
+                slack=slack,
                 config=final_config
             ))
 

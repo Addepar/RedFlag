@@ -72,6 +72,10 @@ def get_default_config():
             'profile': None,
             'model_id': 'anthropic.claude-3-sonnet-20240229-v1:0'
         },
+        'slack': {
+            'token': None,
+            'channel': None,
+        },
         'prompts': {
             'review': {
                 'role': DEFAULT_ROLE,
@@ -146,10 +150,9 @@ def get_final_config(cli_args):
             'user': getenv('RF_JIRA_USER'),
             'token': getenv('RF_JIRA_TOKEN')
         },
-        'bedrock': {
-            'region': getenv('RF_BEDROCK_REGION'),
-            'profile': getenv('RF_BEDROCK_PROFILE'),
-            'model_id': getenv('RF_BEDROCK_MODEL_ID')
+        'slack': {
+            'token': getenv('RF_SLACK_TOKEN'),
+            'channel': getenv('RF_SLACK_CHANNEL')
         }
     }
 
