@@ -29,6 +29,7 @@ from .util.github import (
     matches_template_text,
     filter_commit
 )
+from .util.slack import Slack
 from .util.jira import get_jira_ticket_from_pr_title
 from .util.llm import (
     build_file_context,
@@ -137,6 +138,7 @@ async def query_model(
 async def redflag(
     github: Github,
     jira: Jira,
+    slack: Slack,
     config: dict,
 ):
     try:
@@ -504,6 +506,41 @@ async def redflag(
                     f'Wrote JSON output to {file_path}',
                     MessageType.SUCCESS
                 )
+
+    # retrieve Slack configuration
+    slack_token = config.get('slack').get('token'),
+    slack_channel = config.get('slack').get('channel'),
+
+    if slack_token and slack_channel:
+        slack = Slack(token=slack_token, channel=slack_channel)
+        
+        # check if there are in-scope items
+        if in_scope:
+            slack = Slack(
+                token=config.get('slack').get('token'),
+                channel=config.get('slack').get('channel'),
+            )
+
+            slack_payload = payload
+            if slack_payload:
+                slack.post_message(slack_payload)
+
+            pretty_print(
+                f'Successfully sent message to Slack for secops review, channel #{slack_channel}',
+                MessageType.SUCCESS
+            )
+
+        else:
+            pretty_print(
+                'No secops reviews to send to Slack',
+                MessageType.INFO
+            )
+
+    else:
+        pretty_print(
+            'Slack token or channel not configured',
+             MessageType.WARNING
+        )
 
     if errored:
         file_path = Path(output_dir or '.') / f'Errors-{filename}.json'

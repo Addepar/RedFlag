@@ -89,7 +89,7 @@ def pretty_print_config_table(
     table.add_column("Value")
     table.add_column("Source")
 
-    secret_keys = ["github_token", "jira.token"]
+    secret_keys = ["github_token", "jira.token", "slack.token"]
     hidden_items = ["command"]
 
     def add_row(table, key, value, parent_key = None):
@@ -103,7 +103,7 @@ def pretty_print_config_table(
             # Hide secrets
             if full_key in secret_keys:
                 if value is not None:
-                    value = "*" * len(value)
+                    value = value[:4] + '*' * (len(value) - 4)
 
             # Prettify None values
             if value is None:

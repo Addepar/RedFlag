@@ -19,6 +19,7 @@ from .util.console import (
     pretty_print,
     MessageType
 )
+from .util.slack import Slack
 from .util.jira import get_jira_ticket_from_pr_title
 from .util.llm import (
     build_evaluation_result,
