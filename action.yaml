@@ -1,4 +1,9 @@
-name: 'Addepar RedFlag'
+name: 'RedFlag'
+author: 'Addepar'
+description: 'RedFlag leverages AI to determine high-risk code changes. Run it in your CI pipelines to flag PRs and add the appropriate reviewers.'
+branding:
+  color: 'red'
+  icon: 'flag'
 
 inputs:
   github_token:
