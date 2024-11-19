@@ -1,6 +1,6 @@
-name: 'RedFlag'
+name: 'Addepar RedFlag'
 author: 'Addepar'
-description: 'RedFlag leverages AI to determine high-risk code changes. Run it in your CI pipelines to flag PRs and add the appropriate reviewers.'
+description: 'RedFlag leverages AI to determine high-risk code changes. Run it in your CI pipelines to flag PRs and add reviewers.'
 branding:
   color: 'red'
   icon: 'flag'
