@@ -36,6 +36,21 @@ def common_arguments(parser, default_config):
     parser.add_argument('--no-progress-bar', action='store_false', dest='progress_bar', help='Flag to not display a progress bar.')
     parser.add_argument('--no-strip-html-comments', action='store_false', dest='strip_html_comments', help='Flag to not strip HTML comments from PR descriptions.')
 
+async def run_evaluations(github, jira, dataset, config):
+    await do_evaluations(
+        github=github,
+        jira=Jira,
+        dataset=dataset,
+        config=config
+    )
+
+async def run_redflag(github, jira, config):
+    await redflag(
+        github=github,
+        jira=Jira,
+        slack=Slack,
+        config=config
+    )
 
 def cli():
     pretty_print_header()
@@ -72,7 +87,7 @@ def cli():
 
     # Validate Bedrock configuration
     final_config['bedrock']['profile'] = validate_aws_credentials(final_config['bedrock']['profile'])
-    
+
     # Instantiate GitHub object
     github_token = final_config['github_token']
     auth = Auth.Token(github_token) if github_token else None
@@ -93,7 +108,7 @@ def cli():
                 MessageType.FATAL
             )
             exit(1)
-            
+
         jira = Jira(
             url=final_config['jira']['url'],
             username=jira_user,
@@ -126,25 +141,22 @@ def cli():
     try:
         if args.command == 'eval':
             dataset = Path(final_config['dataset'])
-            asyncio.run(do_evaluations(
+            asyncio.run(run_evaluations(
                 github=github,
                 jira=jira,
                 dataset=dataset,
                 config=final_config
             ))
         else:
-            asyncio.run(redflag(
+            asyncio.run(run_redflag(
                 github=github,
                 jira=jira,
                 slack=slack,
                 config=final_config
             ))
-
-    # Unhandled exception handler
     except Exception as e:
         pretty_print(
-            f'An unhandled exception occurred: {e}',
+            f'Failed to evaluate against {llm.model}, exception: {e}',
             MessageType.FATAL
         )
-        pretty_print_traceback()
         exit(1)
