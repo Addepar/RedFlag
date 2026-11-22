@@ -52,7 +52,7 @@ class PullRequest:
         self,
         message: str
     ) -> None:
-        self.message = message
+        self.__message = message
 
     @property
     def url(self) -> str:
@@ -89,7 +89,7 @@ class PullRequest:
             message = message.replace(line, '')
 
         if strip_html_comments:
-            re.sub(
+            message = re.sub(
                 pattern='<!--.*?-->',
                 repl='',
                 string=message,
